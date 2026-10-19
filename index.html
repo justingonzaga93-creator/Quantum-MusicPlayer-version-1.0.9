@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080710">
+  <title>Quantum Music Player v1.0.9</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">♫</div>
+        <div>
+          <h1>Quantum<span>music</span></h1>
+          <p>YOUR SOUND. YOUR UNIVERSE. · v1.0.9</p>
+        </div>
+      </div>
+      <button class="icon-btn" id="addTop" aria-label="Add music">＋</button>
+    </header>
+<nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-item active" data-page="homeView" aria-current="page"><span>⌂</span><small>Home</small></button>
+      <button class="nav-item" data-page="playerView"><span>♫</span><small>Playing</small></button>
+      <button class="nav-item" data-page="libraryView"><span>▤</span><small>Library</small></button>
+      <button class="nav-item" data-page="onlineView"><span>◎</span><small>Online</small></button>
+      <button class="nav-item" data-page="studioView"><span>〽</span><small>Studio</small></button>
+      <button class="nav-item" data-page="settingsView"><span>⚙</span><small>More</small></button>
+    </nav>
+    <main class="page-stack">
+      <section class="page-view active" id="homeView">
+      <section class="welcome">
+        <p class="eyebrow">YOUR PERSONAL SOUNDSPACE</p>
+        <h2>Feel the <span>frequency.</span></h2>
+        <p class="subtext">Your music, your mood, your universe.</p>
+      </section>
+      <div class="home-quick-grid">
+        <button class="quick-card" id="homePlayBtn"><span>♫</span><strong>Now Playing</strong><small>Jump into your soundspace</small></button>
+        <button class="quick-card" id="homeLibraryBtn"><span>▤</span><strong>My Library</strong><small>Browse your saved tracks</small></button>
+      </div>
+      </section>
+
+      <section class="page-view" id="playerView">
+      <div class="page-heading"><p class="eyebrow">YOUR SOUNDSPACE</p><h2>Now <span>Playing</span></h2><p class="subtext">Your soundtrack, in motion.</p></div>
+      <section class="player-card">
+        <div class="cover-wrap">
+          <canvas id="visualizer" class="visualizer" aria-label="Live audio visualizer"></canvas>
+          <div class="cover" id="cover" aria-label="Album artwork">
+            <img id="coverImage" class="cover-image" alt="Album artwork" hidden>
+            <div class="cover-orb"></div>
+            <div class="cover-equalizer">
+              <i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <span class="cover-note">♫</span>
+            <div class="cover-label">Quantum / AUDIO</div>
+          </div>
+          <div class="cover-glow"></div>
+        </div>
+        <div class="artwork-actions"><button id="customArtworkBtn" class="secondary-action">＋ Custom artwork</button><button id="resetArtworkBtn" class="secondary-action">Reset cover</button></div>
+
+        <div class="track-info">
+          <div class="track-text">
+            <h2 id="songTitle">No song selected</h2>
+            <p id="songArtist">Choose music from your device</p>
+          </div>
+          <button id="favoriteBtn" class="heart-btn"
+            aria-label="Favorite song" aria-pressed="false">♡</button>
+        </div>
+
+        <div class="timeline">
+          <input id="seekBar" type="range" min="0" max="1000"
+            value="0" aria-label="Song progress">
+          <div class="time-row">
+            <span id="currentTime">0:00</span>
+            <span id="duration">0:00</span>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button id="shuffleBtn" class="control-btn small"
+            aria-label="Shuffle" aria-pressed="false">⤨</button>
+          <button id="prevBtn" class="control-btn"
+            aria-label="Previous song">|◀</button>
+          <button id="playBtn" class="play-btn"
+            aria-label="Play">▶</button>
+          <button id="nextBtn" class="control-btn"
+            aria-label="Next song">▶|</button>
+          <button id="repeatBtn" class="control-btn small"
+            aria-label="Repeat mode" aria-pressed="false">↻</button>
+        </div>
+
+        <div class="volume-row">
+          <span>🔈</span>
+          <input id="volumeBar" type="range" min="0" max="100"
+            value="80" aria-label="Volume">
+          <span>🔊</span>
+        </div>
+
+      </section>
+      </section>
+
+      <section class="page-view" id="onlineView">
+        <div class="page-heading"><p class="eyebrow">DISCOVER SOMETHING NEW</p><h2>YouTube <span>Online</span></h2><p class="subtext">Search songs and play videos from YouTube.</p></div>
+        <section class="online-panel">
+          <div class="online-note"><strong>Search and play</strong><p>Search YouTube videos and play them here. Search is provided by the Quantum Music Search server; no API key is needed in the app.</p></div>
+          <form id="youtubeSearchForm" class="online-search-form">
+            <label class="setting-label" for="youtubeQuery">Search YouTube</label>
+            <div class="online-search-row"><input id="youtubeQuery" class="online-input" type="search" placeholder="Search songs, artists, music…" required maxlength="100"><button class="primary-btn" type="submit" id="youtubeSearchBtn">Search</button></div>
+          </form>
+          <p id="youtubeStatus" class="online-status" role="status" aria-live="polite">Search YouTube without entering an API key.</p>
+          <div id="youtubePlayerWrap" class="youtube-player-wrap" hidden>
+            <div class="youtube-player-frame"><iframe id="youtubePlayer" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+            <p class="youtube-player-note">Playback is provided by YouTube. Some videos may be unavailable for embedding.</p>
+          </div>
+          <div id="youtubeResults" class="youtube-results" aria-live="polite"></div>
+        </section>
+      </section>
+
+      <section class="page-view" id="studioView">
+        <div class="page-heading"><p class="eyebrow">TUNE YOUR SOUND</p><h2>Audio <span>Studio</span></h2><p class="subtext">Shape your sound and visual experience.</p></div>
+        <div class="studio-hero"><span class="studio-hero-icon">〽</span><div><strong>Quantum FX</strong><p>Personalize the way your music feels.</p></div></div>
+        <div class="feature-panel">
+          <div class="panel-title"><strong>Audio studio</strong><span>LIVE FX</span></div>
+          <label class="setting-label" for="themeSelect">Theme</label>
+          <select id="themeSelect" class="wide-select">
+            <option value="quantum">Quantum Purple</option>
+            <option value="ocean">Ocean Blue</option>
+            <option value="ember">Solar Ember</option>
+            <option value="mono">Midnight Mono</option>
+          </select>
+          <div class="eq-heading"><label class="setting-label" for="bassRange">Bass boost</label><output id="bassValue">0 dB</output></div>
+          <input id="bassRange" class="setting-range" type="range" min="0" max="12" value="0">
+          <div class="eq-heading"><label class="setting-label" for="trebleRange">Treble</label><output id="trebleValue">0 dB</output></div>
+          <input id="trebleRange" class="setting-range" type="range" min="-6" max="6" value="0">
+          <p class="feature-note">Audio effects depend on browser and device support.</p>
+        </div>
+
+      </section>
+
+      <section class="page-view" id="settingsView">
+        <div class="page-heading"><p class="eyebrow">YOUR APP, YOUR WAY</p><h2>Settings <span>& More</span></h2><p class="subtext">Playback options, storage information and credits.</p></div>
+        <button id="openSecureSettingsBtn" class="secure-settings-entry" type="button"><span class="secure-entry-icon">⌑</span><span class="secure-entry-copy"><strong>Secure Settings</strong><small>YouTube search server connection</small></span><span class="secure-entry-arrow">›</span></button>
+        <div class="sleep-panel">
+          <label for="sleepSelect">☾ Sleep timer</label>
+          <div class="sleep-controls">
+            <select id="sleepSelect" aria-label="Sleep timer duration">
+              <option value="0">Off</option>
+              <option value="5">5 minutes</option>
+              <option value="10">10 minutes</option>
+              <option value="15">15 minutes</option>
+              <option value="30">30 minutes</option>
+              <option value="45">45 minutes</option>
+              <option value="60">60 minutes</option>
+              <option value="90">90 minutes</option>
+            </select>
+            <span id="sleepCountdown">Timer off</span>
+          </div>
+        </div>
+
+        <div class="about-panel">
+          <div class="panel-title"><strong>About &amp; Legal</strong><span>v1.0.9</span></div>
+          <details><summary>Privacy Policy</summary><p>Quantum Music Player processes selected audio files locally in this browser. Imported audio and library records are saved in this browser's site storage when available. This app does not intentionally upload your music to a developer server. Browser storage can be cleared by your device or browser, so keep original audio files and use backup controls where available.</p></details>
+          <details><summary>App Permissions</summary><p>The app requests access only to files you choose through the system file picker. Audio playback and visualizer features use browser media and audio APIs when supported.</p></details>
+          <details><summary>Data &amp; Storage</summary><p>Your library is tied to this browser and app origin. Clearing site data, using private browsing, or opening a different app address may make saved items unavailable. Playlist entries refer to songs saved in this app's library.</p></details>
+          <details><summary>Security &amp; Backup</summary><p>Keep a copy of your original audio files. Export a library backup before major updates when backup is available. A library backup may contain song records and artwork but may not include every original audio file depending on browser limits.</p></details>
+          <details><summary>App Updates</summary><p>Quantum Music Player v1.0.9. Keep the same app origin when updating to help preserve browser-stored data.</p></details>
+          <details><summary>Contact Developer</summary><p>No contact address is configured in this version.</p></details>
+          <div class="credit-card"><p class="eyebrow">CREATOR CREDITS</p><strong>★Create by "Justin Gonzaga"</strong><span>|•Qauntum Squad•|</span></div>
+          <div class="data-actions"><button id="exportBackupBtn" class="secondary-action">Export library backup</button><button id="importBackupBtn" class="secondary-action">Restore backup</button><button id="reducedMotionBtn" class="secondary-action" aria-pressed="false">Reduced motion: Off</button></div>
+          <p class="legal-note">Backup and restore operate on app library records. Always keep your original audio files separately.</p>
+        </div>
+      </section>
+
+      <section class="page-view" id="secureSettingsView">
+        <div class="page-heading"><p class="eyebrow">PRIVATE CONFIGURATION</p><h2>Secure <span>Settings</span></h2><p class="subtext">Check the server connection used for online search.</p></div>
+        <button id="backFromSecureSettingsBtn" class="secondary-action secure-back-btn" type="button">← Back to Settings</button>
+        <section class="online-panel secure-key-panel">
+          <div class="secure-lock-heading"><span class="secure-lock-icon">⌑</span><div><strong>YouTube Online Search</strong><p>Cloudflare Worker connection</p></div><span id="youtubeKeyState" class="secure-state">Checking</span></div>
+          <div class="online-note"><strong>No API key required</strong><p>Online search connects to your Cloudflare Worker. Your YouTube API key is kept in the Worker secret settings and is not stored in this app.</p></div>
+          <p id="secureYoutubeStatus" class="online-status" role="status" aria-live="polite">Online search uses the Quantum Music Search server.</p>
+        </section>
+      </section>
+
+      <section class="page-view" id="libraryView">
+      <section class="library">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">YOUR COLLECTION</p>
+            <h2>My Library <span id="songCount">(0)</span></h2>
+          </div>
+          <button class="add-btn" id="addBtn">＋ Add songs</button>
+        </div>
+
+        <div class="library-tools">
+          <div class="filter-tabs" role="group" aria-label="Library filter">
+            <button class="filter-tab active" data-filter="all" aria-pressed="true">All songs</button>
+            <button class="filter-tab" data-filter="favorites" aria-pressed="false">♥ Favorites</button>
+          </div>
+          <button class="add-btn secondary-add" id="createPlaylistBtn">＋ Playlist</button>
+        </div>
+        <div id="playlistChips" class="playlist-chips" aria-label="Your playlists"></div>
+
+        <div class="search-wrap">
+          <span>⌕</span>
+          <input id="searchInput" type="search"
+            placeholder="Search your music..." aria-label="Search music">
+        </div>
+
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">♫</div>
+          <h3>Your library is waiting</h3>
+          <p>Add music stored on your phone to get started.</p>
+          <button class="primary-btn" id="emptyAddBtn">Choose music</button>
+        </div>
+
+        <div id="songList" class="song-list"></div>
+      </section>
+      </section>
+      <p id="status" class="status global-status" role="status" aria-live="polite">Ready for your soundtrack</p>
+    </main>
+
+    <footer>
+      <div class="footer-logo">✦ Quantum MUSIC</div>
+      <p>MADE FOR YOUR FREQUENCY</p>
+      
+    </footer>
+  </div>
+
+  <input type="file" id="fileInput" accept="audio/*,.mp3,.m4a,.aac,.wav,.ogg,.flac,.opus" multiple hidden>
+  <input type="file" id="artworkInput" accept="image/*" hidden>
+  <input type="file" id="backupInput" accept="application/json,.json" hidden>
+
+  <audio id="audio" preload="metadata"></audio>
+
+  <script src="script.js"></script>
+  <script>if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js").catch(() => {});</script>
+</body>
+</html>
